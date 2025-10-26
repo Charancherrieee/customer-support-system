@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h2>
+            <p class="text-muted">Welcome back, {{ current_user.full_name }}! Here's an overview of the support system.</p>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card border-primary shadow-sm h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-ticket-alt fa-3x text-primary mb-3"></i>
+                    <h3 class="display-4">{{ stats.total or 0 }}</h3>
+                    <p class="text-muted mb-0">Total Tickets</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card border-info shadow-sm h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-folder-open fa-3x text-info mb-3"></i>
+                    <h3 class="display-4">{{ stats.open_count or 0 }}</h3>
+                    <p class="text-muted mb-0">Open Tickets</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card border-warning shadow-sm h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-spinner fa-3x text-warning mb-3"></i>
+                    <h3 class="display-4">{{ stats.in_progress_count or 0 }}</h3>
+                    <p class="text-muted mb-0">In Progress</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card border-success shadow-sm h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+                    <h3 class="display-4">{{ stats.resolved_count or 0 }}</h3>
+                    <p class="text-muted mb-0">Resolved</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Priority Distribution -->
+    {% if priority_stats %}
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-exclamation-triangle"></i> Active Tickets by Priority</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        {% for priority in priority_stats %}
+                        <div class="col-md-3 mb-2">
+                            <div class="alert alert-{{ get_priority_class(priority.priority) }} mb-0">
+                                <h4>{{ priority.count }}</h4>
+                                <p class="mb-0">{{ priority.priority|upper }}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Quick Actions -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-bolt"></i> Quick Actions</h5>
+                    <div class="d-grid gap-2 d-md-flex">
+                        <a href="{{ url_for('admin.tickets') }}" class="btn btn-primary">
+                            <i class="fas fa-list"></i> View All Tickets
+                        </a>
+                        <a href="{{ url_for('admin.tickets', status='open') }}" class="btn btn-info">
+                            <i class="fas fa-folder-open"></i> Open Tickets
+                        </a>
+                        <a href="{{ url_for('admin.analytics') }}" class="btn btn-success">
+                            <i class="fas fa-chart-bar"></i> Analytics
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Tickets -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-clock"></i> Recent Tickets</h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_tickets %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Ticket #</th>
+                                        <th>Customer</th>
+                                        <th>Subject</th>
+                                        <th>Category</th>
+                                        <th>Priority</th>
+                                        <th>Status</th>
+                                        <th>Created</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for ticket in recent_tickets %}
+                                    <tr>
+                                        <td><strong>{{ ticket.ticket_number }}</strong></td>
+                                        <td>{{ ticket.customer_name }}</td>
+                                        <td>{{ ticket.subject[:40] }}{% if ticket.subject|length > 40 %}...{% endif %}</td>
+                                        <td><span class="badge bg-info">{{ ticket.category_name }}</span></td>
+                                        <td>
+                                            <span class="badge {{ get_priority_class(ticket.priority) }}">
+                                                {{ ticket.priority|upper }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="badge {{ get_status_class(ticket.status) }}">
+                                                {{ ticket.status.replace('_', ' ')|title }}
+                                            </span>
+                                        </td>
+                                        <td>{{ ticket.created_at.strftime('%b %d, %Y') if ticket.created_at else 'N/A' }}</td>
+                                        <td>
+                                            <a href="{{ url_for('tickets.view_ticket', ticket_id=ticket.ticket_id) }}" 
+                                               class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-eye"></i> View
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="text-center mt-3">
+                            <a href="{{ url_for('admin.tickets') }}" class="btn btn-primary">
+                                View All Tickets <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-inbox fa-5x text-muted mb-3"></i>
+                            <h4>No Tickets Yet</h4>
+                            <p class="text-muted">No support tickets have been created yet.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

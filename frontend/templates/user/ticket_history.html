@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}My Tickets{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2><i class="fas fa-history"></i> My Tickets</h2>
+            <p class="text-muted">View and manage all your support tickets</p>
+        </div>
+        <div class="col-md-4 text-end">
+            <a href="{{ url_for('tickets.create_ticket') }}" class="btn btn-primary">
+                <i class="fas fa-plus-circle"></i> New Ticket
+            </a>
+        </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <form method="GET" action="{{ url_for('tickets.ticket_history') }}" class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Filter by Status</label>
+                    <select name="status" class="form-select filter-select">
+                        <option value="">All Statuses</option>
+                        <option value="open" {% if request.args.get('status') == 'open' %}selected{% endif %}>Open</option>
+                        <option value="in_progress" {% if request.args.get('status') == 'in_progress' %}selected{% endif %}>In Progress</option>
+                        <option value="resolved" {% if request.args.get('status') == 'resolved' %}selected{% endif %}>Resolved</option>
+                        <option value="closed" {% if request.args.get('status') == 'closed' %}selected{% endif %}>Closed</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Filter by Priority</label>
+                    <select name="priority" class="form-select filter-select">
+                        <option value="">All Priorities</option>
+                        <option value="low" {% if request.args.get('priority') == 'low' %}selected{% endif %}>Low</option>
+                        <option value="medium" {% if request.args.get('priority') == 'medium' %}selected{% endif %}>Medium</option>
+                        <option value="high" {% if request.args.get('priority') == 'high' %}selected{% endif %}>High</option>
+                        <option value="urgent" {% if request.args.get('priority') == 'urgent' %}selected{% endif %}>Urgent</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">&nbsp;</label>
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-filter"></i> Apply Filters
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Tickets List -->
+    <div class="row">
+        <div class="col-md-12">
+            {% if tickets %}
+                {% for ticket in tickets %}
+                <div class="card ticket-card priority-{{ ticket.priority }} mb-3 shadow-sm">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h5 class="card-title">
+                                    <a href="{{ url_for('tickets.view_ticket', ticket_id=ticket.ticket_id) }}" class="text-decoration-none">
+                                        {{ ticket.subject }}
+                                    </a>
+                                </h5>
+                                <p class="card-text text-muted">
+                                    {{ ticket.description[:150] }}{% if ticket.description|length > 150 %}...{% endif %}
+                                </p>
+                                <div class="d-flex gap-2 flex-wrap">
+                                    <span class="badge bg-secondary">
+                                        <i class="fas fa-hashtag"></i> {{ ticket.ticket_number }}
+                                    </span>
+                                    <span class="badge bg-info">
+                                        <i class="fas fa-tag"></i> {{ ticket.category_name }}
+                                    </span>
+                                    <span class="badge {{ get_priority_class(ticket.priority) }}">
+                                        <i class="fas fa-exclamation-circle"></i> {{ ticket.priority|upper }}
+                                    </span>
+                                    <span class="badge {{ get_status_class(ticket.status) }}">
+                                        <i class="fas fa-info-circle"></i> {{ ticket.status.replace('_', ' ')|title }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <p class="text-muted mb-2">
+                                    <small><i class="fas fa-clock"></i> Created: {{ ticket.created_at.strftime('%b %d, %Y %I:%M %p') if ticket.created_at else 'N/A' }}</small>
+                                </p>
+                                {% if ticket.updated_at and ticket.updated_at != ticket.created_at %}
+                                <p class="text-muted mb-3">
+                                    <small><i class="fas fa-sync"></i> Updated: {{ ticket.updated_at.strftime('%b %d, %Y %I:%M %p') }}</small>
+                                </p>
+                                {% endif %}
+                                <a href="{{ url_for('tickets.view_ticket', ticket_id=ticket.ticket_id) }}" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-eye"></i> View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <!-- Summary -->
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i> 
+                    Showing <strong>{{ tickets|length }}</strong> ticket(s)
+                </div>
+            {% else %}
+                <div class="card shadow">
+                    <div class="card-body text-center py-5">
+                        <i class="fas fa-inbox fa-5x text-muted mb-4"></i>
+                        <h3>No Tickets Found</h3>
+                        <p class="text-muted mb-4">You haven't created any support tickets yet, or no tickets match your filters.</p>
+                        <a href="{{ url_for('tickets.create_ticket') }}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-plus-circle"></i> Create Your First Ticket
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

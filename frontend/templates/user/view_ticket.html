@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+
+{% block title %}Ticket #{{ ticket.ticket_number }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Back Button -->
+    <div class="mb-3">
+        {% if current_user.is_agent() %}
+            <a href="{{ url_for('admin.tickets') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left"></i> Back to All Tickets
+            </a>
+        {% else %}
+            <a href="{{ url_for('tickets.ticket_history') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left"></i> Back to My Tickets
+            </a>
+        {% endif %}
+    </div>
+
+    <!-- Ticket Header -->
+    <div class="card shadow mb-4">
+        <div class="card-header bg-primary text-white">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h4 class="mb-0">
+                        <i class="fas fa-ticket-alt"></i> {{ ticket.subject }}
+                    </h4>
+                    <small>Ticket #{{ ticket.ticket_number }}</small>
+                </div>
+                <div class="col-md-4 text-end">
+                    <span class="badge {{ get_priority_class(ticket.priority) }} fs-6">
+                        {{ ticket.priority|upper }}
+                    </span>
+                    <span class="badge {{ get_status_class(ticket.status) }} fs-6">
+                        {{ ticket.status.replace('_', ' ')|title }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <p class="mb-2"><strong><i class="fas fa-user"></i> Customer:</strong> {{ ticket.customer_name }}</p>
+                    <p class="mb-2"><strong><i class="fas fa-envelope"></i> Email:</strong> {{ ticket.customer_email }}</p>
+                    <p class="mb-2"><strong><i class="fas fa-tag"></i> Category:</strong> <span class="badge bg-info">{{ ticket.category_name }}</span></p>
+                </div>
+                <div class="col-md-6">
+                    <p class="mb-2"><strong><i class="fas fa-clock"></i> Created:</strong> {{ ticket.created_at.strftime('%b %d, %Y %I:%M %p') if ticket.created_at else 'N/A' }}</p>
+                    <p class="mb-2"><strong><i class="fas fa-sync"></i> Last Updated:</strong> {{ ticket.updated_at.strftime('%b %d, %Y %I:%M %p') if ticket.updated_at else 'N/A' }}</p>
+                    {% if ticket.assigned_agent_name %}
+                    <p class="mb-2"><strong><i class="fas fa-user-tie"></i> Assigned To:</strong> {{ ticket.assigned_agent_name }}</p>
+                    {% else %}
+                    <p class="mb-2"><strong><i class="fas fa-user-tie"></i> Assigned To:</strong> <span class="text-muted">Not assigned</span></p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <hr>
+            
+            <div class="mb-3">
+                <h5><i class="fas fa-align-left"></i> Description</h5>
+                <p class="text-muted">{{ ticket.description }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Actions (Only for Agents/Admins) -->
+    {% if current_user.is_agent() %}
+    <div class="card shadow mb-4">
+        <div class="card-header bg-warning">
+            <h5 class="mb-0"><i class="fas fa-tools"></i> Admin Actions</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <!-- Update Status -->
+                <div class="col-md-4 mb-3">
+                    <form method="POST" action="{{ url_for('admin.update_status', ticket_id=ticket.ticket_id) }}">
+                        <label class="form-label"><strong>Update Status:</strong></label>
+                        <select name="status" class="form-select mb-2">
+                            <option value="open" {% if ticket.status == 'open' %}selected{% endif %}>Open</option>
+                            <option value="in_progress" {% if ticket.status == 'in_progress' %}selected{% endif %}>In Progress</option>
+                            <option value="resolved" {% if ticket.status == 'resolved' %}selected{% endif %}>Resolved</option>
+                            <option value="closed" {% if ticket.status == 'closed' %}selected{% endif %}>Closed</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary btn-sm w-100">
+                            <i class="fas fa-save"></i> Update Status
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Update Priority -->
+                <div class="col-md-4 mb-3">
+                    <form method="POST" action="{{ url_for('admin.update_priority', ticket_id=ticket.ticket_id) }}">
+                        <label class="form-label"><strong>Update Priority:</strong></label>
+                        <select name="priority" class="form-select mb-2">
+                            <option value="low" {% if ticket.priority == 'low' %}selected{% endif %}>Low</option>
+                            <option value="medium" {% if ticket.priority == 'medium' %}selected{% endif %}>Medium</option>
+                            <option value="high" {% if ticket.priority == 'high' %}selected{% endif %}>High</option>
+                            <option value="urgent" {% if ticket.priority == 'urgent' %}selected{% endif %}>Urgent</option>
+                        </select>
+                        <button type="submit" class="btn btn-warning btn-sm w-100">
+                            <i class="fas fa-exclamation-triangle"></i> Update Priority
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Assign Ticket -->
+                <div class="col-md-4 mb-3">
+                    <form method="POST" action="{{ url_for('admin.assign_ticket', ticket_id=ticket.ticket_id) }}">
+                        <label class="form-label"><strong>Assign To:</strong></label>
+                        <select name="agent_id" class="form-select mb-2">
+                            <option value="">Select Agent...</option>
+                            <!-- You'd populate this from agents list -->
+                            <option value="{{ current_user.user_id }}">Myself</option>
+                        </select>
+                        <button type="submit" class="btn btn-info btn-sm w-100">
+                            <i class="fas fa-user-check"></i> Assign Ticket
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Responses/Timeline -->
+    <div class="card shadow mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="fas fa-comments"></i> Responses</h5>
+        </div>
+        <div class="card-body">
+            {% if responses %}
+                <div class="timeline">
+                    {% for response in responses %}
+                    <div class="timeline-item">
+                        <div class="timeline-icon">
+                            <i class="fas fa-{% if response.responder_role == 'customer' %}user{% else %}user-tie{% endif %}"></i>
+                        </div>
+                        <div class="timeline-content {% if response.is_internal %}internal-note{% endif %}">
+                            <div class="d-flex justify-content-between mb-2">
+                                <strong>
+                                    {{ response.responder_name }}
+                                    {% if response.responder_role != 'customer' %}
+                                        <span class="badge bg-primary">{{ response.responder_role|title }}</span>
+                                    {% endif %}
+                                    {% if response.is_internal %}
+                                        <span class="badge bg-warning text-dark">Internal Note</span>
+                                    {% endif %}
+                                </strong>
+                                <small class="text-muted">
+                                    {{ response.created_at.strftime('%b %d, %Y %I:%M %p') if response.created_at else 'N/A' }}
+                                </small>
+                            </div>
+                            <p class="mb-0">{{ response.response_text }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-muted text-center py-4">No responses yet. Be the first to reply!</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Add Response Form -->
+    <div class="card shadow">
+        <div class="card-header bg-success text-white">
+            <h5 class="mb-0"><i class="fas fa-reply"></i> Add Response</h5>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('tickets.add_reply', ticket_id=ticket.ticket_id) }}">
+                <div class="mb-3">
+                    <label for="response_text" class="form-label">Your Response</label>
+                    <textarea class="form-control" id="response_text" name="response_text" rows="4" 
+                              placeholder="Type your response here..." required minlength="10"></textarea>
+                    <div class="form-text">Minimum 10 characters</div>
+                </div>
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-paper-plane"></i> Send Response
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Internal Note Form (Admin Only) -->
+    {% if current_user.is_agent() %}
+    <div class="card shadow mt-3">
+        <div class="card-header bg-warning">
+            <h5 class="mb-0"><i class="fas fa-sticky-note"></i> Add Internal Note (Not visible to customer)</h5>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('admin.add_internal_note', ticket_id=ticket.ticket_id) }}">
+                <div class="mb-3">
+                    <textarea class="form-control" name="note_text" rows="3" 
+                              placeholder="Add internal notes for team members..." required minlength="5"></textarea>
+                </div>
+                <button type="submit" class="btn btn-warning">
+                    <i class="fas fa-save"></i> Save Internal Note
+                </button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

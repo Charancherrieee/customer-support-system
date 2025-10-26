@@ -1,0 +1,358 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics & Reports{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2><i class="fas fa-chart-bar"></i> Analytics & Reports</h2>
+            <p class="text-muted">Performance metrics and insights</p>
+        </div>
+        <div class="col-md-4 text-end">
+            <div class="btn-group">
+                <a href="{{ url_for('admin.analytics', days=7) }}" class="btn btn-sm btn-outline-primary {% if days == 7 %}active{% endif %}">7 Days</a>
+                <a href="{{ url_for('admin.analytics', days=30) }}" class="btn btn-sm btn-outline-primary {% if days == 30 %}active{% endif %}">30 Days</a>
+                <a href="{{ url_for('admin.analytics', days=90) }}" class="btn btn-sm btn-outline-primary {% if days == 90 %}active{% endif %}">90 Days</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="stats-card bg-primary-gradient">
+                <i class="fas fa-ticket-alt"></i>
+                <h3>{% if status_distribution %}{{ status_distribution|sum(attribute='count') }}{% else %}0{% endif %}</h3>
+                <p>Total Tickets</p>
+                <small>In the last {{ days }} days</small>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stats-card bg-success-gradient">
+                <i class="fas fa-check-circle"></i>
+                <h3>
+                    {% if status_distribution %}
+                        {% set total = status_distribution|sum(attribute='count') %}
+                        {% set resolved = status_distribution|selectattr('status', 'equalto', 'resolved')|map(attribute='count')|sum %}
+                        {% if total > 0 %}
+                            {{ "%.0f"|format((resolved / total * 100)) }}%
+                        {% else %}
+                            0%
+                        {% endif %}
+                    {% else %}
+                        0%
+                    {% endif %}
+                </h3>
+                <p>Resolution Rate</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stats-card bg-info-gradient">
+                <i class="fas fa-clock"></i>
+                <h3>
+                    {% if resolution_times %}
+                        {% set avg_list = resolution_times|map(attribute='avg_hours')|select|list %}
+                        {% if avg_list %}
+                            {{ "%.1f"|format((avg_list|sum / avg_list|length)) }} hrs
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </h3>
+                <p>Avg Response Time</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-chart-pie"></i> Ticket Status Distribution</h5>
+                </div>
+                <div class="card-body">
+                    {% if status_distribution %}
+                    <div class="chart-container">
+                        <canvas id="statusChart"></canvas>
+                    </div>
+                    <div class="mt-3">
+                        {% for status in status_distribution %}
+                        <div class="d-flex justify-content-between mb-2">
+                            <span><span class="badge {{ get_status_class(status.status) }}">{{ status.status.replace('_', ' ')|title }}</span></span>
+                            <strong>{{ status.count }}</strong>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="text-center text-muted py-4">No data available</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-chart-pie"></i> Category Distribution</h5>
+                </div>
+                <div class="card-body">
+                    {% if category_stats %}
+                    <div class="chart-container">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                    <div class="mt-3">
+                        {% for category in category_stats[:5] %}
+                        <div class="d-flex justify-content-between mb-2">
+                            <span><span class="badge bg-info">{{ category.category_name }}</span></span>
+                            <strong>{{ category.count }}</strong>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="text-center text-muted py-4">No data available</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Volume Trend -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-chart-line"></i> Ticket Volume Trend (Last {{ days }} Days)</h5>
+                </div>
+                <div class="card-body">
+                    {% if volume_trend %}
+                    <div class="chart-container" style="height: 300px;">
+                        <canvas id="volumeChart"></canvas>
+                    </div>
+                    {% else %}
+                    <p class="text-center text-muted py-4">No data available</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resolution Time -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-clock"></i> Average Resolution Time by Priority</h5>
+                </div>
+                <div class="card-body">
+                    {% if resolution_times %}
+                    <div class="chart-container" style="height: 300px;">
+                        <canvas id="resolutionChart"></canvas>
+                    </div>
+                    <div class="table-responsive mt-3">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Priority</th>
+                                    <th>Avg. Resolution Time (Hours)</th>
+                                    <th>Total Resolved</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for res in resolution_times %}
+                                <tr>
+                                    <td><span class="badge {{ get_priority_class(res.priority) }}">{{ res.priority|upper }}</span></td>
+                                    <td>{% if res.avg_hours %}{{ "%.1f"|format(res.avg_hours|float) }}{% else %}N/A{% endif %}</td>
+                                    <td>{{ res.count }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-center text-muted py-4">No resolved tickets yet to calculate resolution time.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Agent Performance -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-users"></i> Agent Performance</h5>
+                </div>
+                <div class="card-body">
+                    {% if agent_performance %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Agent Name</th>
+                                    <th>Total Assigned</th>
+                                    <th>Resolved</th>
+                                    <th>Closed</th>
+                                    <th>Avg. Resolution Time</th>
+                                    <th>Resolution Rate</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for agent in agent_performance %}
+                                <tr>
+                                    <td><strong>{{ agent.full_name }}</strong></td>
+                                    <td><span class="badge bg-primary">{{ agent.total_assigned or 0 }}</span></td>
+                                    <td><span class="badge bg-success">{{ agent.resolved or 0 }}</span></td>
+                                    <td><span class="badge bg-secondary">{{ agent.closed or 0 }}</span></td>
+                                    <td>
+                                        {% if agent.avg_resolution_hours %}
+                                            {{ "%.1f"|format(agent.avg_resolution_hours|float) }} hrs
+                                        {% else %}
+                                            N/A
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if agent.total_assigned and agent.total_assigned > 0 %}
+                                            {% set rate = ((agent.resolved or 0) / agent.total_assigned * 100) %}
+                                            <div class="progress">
+                                                <div class="progress-bar bg-success" style="width: {{ rate }}%">
+                                                    {{ "%.0f"|format(rate) }}%
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            N/A
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-center text-muted py-4">No agent performance data available yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Status Distribution Chart
+{% if status_distribution %}
+const statusLabels = {{ status_distribution|map(attribute='status')|map('replace', '_', ' ')|map('title')|list|tojson }};
+const statusData = {{ status_distribution|map(attribute='count')|list|tojson }};
+
+const statusCtx = document.getElementById('statusChart');
+if (statusCtx) {
+    new Chart(statusCtx, {
+        type: 'doughnut',
+        data: {
+            labels: statusLabels,
+            datasets: [{
+                data: statusData,
+                backgroundColor: ['#6B46C1', '#B794F4', '#48BB78', '#718096']
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom' }
+            }
+        }
+    });
+}
+{% endif %}
+
+// Category Distribution Chart
+{% if category_stats %}
+const categoryLabels = {{ category_stats[:5]|map(attribute='category_name')|list|tojson }};
+const categoryData = {{ category_stats[:5]|map(attribute='count')|list|tojson }};
+
+const categoryCtx = document.getElementById('categoryChart');
+if (categoryCtx) {
+    new Chart(categoryCtx, {
+        type: 'doughnut',
+        data: {
+            labels: categoryLabels,
+            datasets: [{
+                data: categoryData,
+                backgroundColor: ['#6B46C1', '#48BB78', '#ED8936', '#F56565', '#4299E1']
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom' }
+            }
+        }
+    });
+}
+{% endif %}
+
+// Volume Trend Chart
+{% if volume_trend %}
+const volumeLabels = {{ volume_trend|map(attribute='date')|map('string')|list|tojson }};
+const volumeData = {{ volume_trend|map(attribute='count')|list|tojson }};
+
+const volumeCtx = document.getElementById('volumeChart');
+if (volumeCtx) {
+    new Chart(volumeCtx, {
+        type: 'line',
+        data: {
+            labels: volumeLabels,
+            datasets: [{
+                label: 'Tickets Created',
+                data: volumeData,
+                borderColor: '#6B46C1',
+                backgroundColor: 'rgba(107, 70, 193, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+}
+{% endif %}
+
+// Resolution Time Chart
+{% if resolution_times %}
+const resolutionLabels = {{ resolution_times|map(attribute='priority')|map('upper')|list|tojson }};
+const resolutionData = {{ resolution_times|map(attribute='avg_hours')|list|tojson }};
+
+const resolutionCtx = document.getElementById('resolutionChart');
+if (resolutionCtx) {
+    new Chart(resolutionCtx, {
+        type: 'bar',
+        data: {
+            labels: resolutionLabels,
+            datasets: [{
+                label: 'Avg. Hours to Resolve',
+                data: resolutionData,
+                backgroundColor: ['#48BB78', '#4299E1', '#ED8936', '#F56565']
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+}
+{% endif %}
+</script>
+{% endblock %}
