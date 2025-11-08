@@ -100,6 +100,9 @@ def utility_processor():
     )
 
 if __name__ == '__main__':
+    print("Starting Flask app...")
+    print("Server running at http://localhost:5000")
+    app.run(debug=True, host='0.0.0.0', port=5000)
     upload_folder = app.config.get('UPLOAD_FOLDER')
     if upload_folder and not os.path.exists(upload_folder):
         os.makedirs(upload_folder)
