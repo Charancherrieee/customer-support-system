@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, sessio
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.security import check_password_hash
 from models import User
+from flask import current_app
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -18,7 +19,7 @@ def login():
             flash('Email and password are required.', 'danger')
             return redirect(url_for('auth.login'))
         
-        user = User.get_by_email(auth_bp.root_path, email)
+        user = User.get_by_email(current_app.mysql, email)
         
         if user and user.check_password(password):
             login_user(user)
@@ -63,7 +64,7 @@ def signup():
             flash('Password must be at least 6 characters.', 'danger')
             return redirect(url_for('auth.signup'))
         
-        existing_user = User.get_by_email(auth_bp.root_path, email)
+        existing_user = User.get_by_email(current_app.mysql, email)
         if existing_user:
             flash('Email already registered.', 'danger')
             return redirect(url_for('auth.signup'))
@@ -82,7 +83,7 @@ def signup():
 @auth_bp.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
-    mysql = auth_bp.root_path
+    mysql = current_app.mysql
     
     if request.method == 'POST':
         full_name = request.form.get('full_name')
