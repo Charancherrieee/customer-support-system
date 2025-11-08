@@ -6,9 +6,9 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card shadow-lg">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0"><i class="fas fa-plus-circle"></i> Create New Support Ticket</h4>
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">Create New Support Ticket</h3>
                 </div>
                 <div class="card-body p-4">
                     <p class="text-muted mb-4">Please provide detailed information about your issue. Our support team will respond as soon as possible.</p>
@@ -16,9 +16,9 @@
                     <form method="POST" action="{{ url_for('tickets.create_ticket') }}" class="needs-validation" novalidate>
                         
                         <!-- Category -->
-                        <div class="mb-4">
+                        <div class="mb-3">
                             <label for="category_id" class="form-label">
-                                <i class="fas fa-list"></i> Category *
+                                Category *
                             </label>
                             <select class="form-select" id="category_id" name="category_id" required>
                                 <option value="">-- Select a category --</option>
@@ -32,46 +32,45 @@
                         </div>
 
                         <!-- Subject -->
-                        <div class="mb-4">
+                        <div class="mb-3">
                             <label for="subject" class="form-label">
-                                <i class="fas fa-heading"></i> Subject *
+                                Subject *
                             </label>
                             <input type="text" class="form-control" id="subject" name="subject" 
                                    placeholder="Brief description of your issue" 
                                    minlength="5" maxlength="200" required>
-                            <div class="form-text">Minimum 5 characters, maximum 200 characters</div>
+                            <small class="text-muted">Minimum 5 characters, maximum 200 characters</small>
                             <div class="invalid-feedback">Please provide a subject (5-200 characters).</div>
                         </div>
 
                         <!-- Description -->
-                        <div class="mb-4">
+                        <div class="mb-3">
                             <label for="description" class="form-label">
-                                <i class="fas fa-align-left"></i> Description *
+                                Description *
                             </label>
                             <textarea class="form-control" id="description" name="description" 
                                       rows="6" placeholder="Please provide detailed information about your issue..."
                                       minlength="20" maxlength="2000" required></textarea>
-                            <div class="form-text">Minimum 20 characters. Be as detailed as possible.</div>
+                            <small class="text-muted">Minimum 20 characters. Be as detailed as possible.</small>
                             <div class="invalid-feedback">Please provide a detailed description (minimum 20 characters).</div>
                         </div>
 
                         <!-- Priority -->
                         <div class="mb-4">
                             <label for="priority" class="form-label">
-                                <i class="fas fa-exclamation-circle"></i> Priority *
+                                Priority *
                             </label>
                             <select class="form-select" id="priority" name="priority" required>
-                                <option value="low">🟢 Low - General inquiry or minor issue</option>
-                                <option value="medium" selected>🟡 Medium - Normal issue affecting functionality</option>
-                                <option value="high">🟠 High - Significant issue requiring quick attention</option>
-                                <option value="urgent">🔴 Urgent - Critical issue blocking work</option>
+                                <option value="low">Low - General inquiry or minor issue</option>
+                                <option value="medium" selected>Medium - Normal issue affecting functionality</option>
+                                <option value="high">High - Significant issue requiring quick attention</option>
+                                <option value="urgent">Urgent - Critical issue blocking work</option>
                             </select>
-                            <div class="invalid-feedback">Please select a priority level.</div>
                         </div>
 
                         <!-- Priority Guidelines -->
-                        <div class="alert alert-info">
-                            <h6 class="alert-heading"><i class="fas fa-info-circle"></i> Priority Guidelines:</h6>
+                        <div class="alert alert-info mb-4">
+                            <h6 class="alert-heading">Priority Guidelines:</h6>
                             <ul class="mb-0 small">
                                 <li><strong>Low:</strong> General questions, feature requests</li>
                                 <li><strong>Medium:</strong> Issues affecting some functionality</li>
@@ -81,12 +80,12 @@
                         </div>
 
                         <!-- Buttons -->
-                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                             <a href="{{ url_for('tickets.user_dashboard') }}" class="btn btn-outline-secondary">
-                                <i class="fas fa-times"></i> Cancel
+                                Cancel
                             </a>
                             <button type="submit" class="btn btn-primary btn-lg">
-                                <i class="fas fa-paper-plane"></i> Submit Ticket
+                                Submit Ticket
                             </button>
                         </div>
                     </form>
@@ -96,7 +95,7 @@
             <!-- Help Section -->
             <div class="card mt-4">
                 <div class="card-body">
-                    <h5><i class="fas fa-question-circle"></i> Tips for Getting Help Faster</h5>
+                    <h5>Tips for Getting Help Faster</h5>
                     <ul>
                         <li>Choose the correct category for your issue</li>
                         <li>Write a clear and descriptive subject line</li>

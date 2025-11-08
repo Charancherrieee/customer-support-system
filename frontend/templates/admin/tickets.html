@@ -6,7 +6,7 @@
 <div class="container-fluid">
     <div class="row mb-4">
         <div class="col-md-8">
-            <h2><i class="fas fa-ticket-alt"></i> All Support Tickets</h2>
+            <h2>All Support Tickets</h2>
             <p class="text-muted">Manage and monitor all customer support tickets</p>
         </div>
         <div class="col-md-4 text-end">
@@ -19,10 +19,10 @@
         </div>
     </div>
 
-    <!-- Advanced Filters -->
+    <!-- Filters -->
     <div class="card shadow-sm mb-4">
-        <div class="card-header bg-primary text-white">
-            <h5 class="mb-0"><i class="fas fa-filter"></i> Filter Tickets</h5>
+        <div class="card-header">
+            <h5 class="mb-0">Filter Tickets</h5>
         </div>
         <div class="card-body">
             <form method="GET" action="{{ url_for('admin.tickets') }}" class="row g-3">
@@ -88,7 +88,7 @@
     <!-- Quick Stats -->
     <div class="row mb-4">
         <div class="col-md-3">
-            <div class="card border-info">
+            <div class="card">
                 <div class="card-body text-center">
                     <h5 class="text-info">Open</h5>
                     <h2>{{ tickets|selectattr('status', 'equalto', 'open')|list|length }}</h2>
@@ -96,7 +96,7 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card border-warning">
+            <div class="card">
                 <div class="card-body text-center">
                     <h5 class="text-warning">In Progress</h5>
                     <h2>{{ tickets|selectattr('status', 'equalto', 'in_progress')|list|length }}</h2>
@@ -104,7 +104,7 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card border-success">
+            <div class="card">
                 <div class="card-body text-center">
                     <h5 class="text-success">Resolved</h5>
                     <h2>{{ tickets|selectattr('status', 'equalto', 'resolved')|list|length }}</h2>
@@ -112,7 +112,7 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card border-secondary">
+            <div class="card">
                 <div class="card-body text-center">
                     <h5 class="text-secondary">Closed</h5>
                     <h2>{{ tickets|selectattr('status', 'equalto', 'closed')|list|length }}</h2>
@@ -122,15 +122,15 @@
     </div>
 
     <!-- Tickets Table -->
-    <div class="card shadow">
-        <div class="card-header bg-primary text-white">
-            <h5 class="mb-0"><i class="fas fa-list"></i> Tickets List</h5>
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">Tickets List</h5>
         </div>
         <div class="card-body">
             {% if tickets %}
                 <div class="table-responsive">
                     <table class="table table-hover">
-                        <thead class="table-light">
+                        <thead>
                             <tr>
                                 <th>Ticket #</th>
                                 <th>Customer</th>
@@ -145,15 +145,13 @@
                         </thead>
                         <tbody>
                             {% for ticket in tickets %}
-                            <tr class="{% if ticket.priority == 'urgent' %}table-danger{% elif ticket.priority == 'high' %}table-warning{% endif %}">
+                            <tr>
                                 <td><strong>{{ ticket.ticket_number }}</strong></td>
                                 <td>
                                     <div>{{ ticket.customer_name }}</div>
                                     <small class="text-muted">{{ ticket.customer_email if ticket.customer_email else '' }}</small>
                                 </td>
-                                <td>
-                                    <div>{{ ticket.subject[:50] }}{% if ticket.subject|length > 50 %}...{% endif %}</div>
-                                </td>
+                                <td>{{ ticket.subject[:50] }}{% if ticket.subject|length > 50 %}...{% endif %}</td>
                                 <td><span class="badge bg-info">{{ ticket.category_name }}</span></td>
                                 <td>
                                     <span class="badge {{ get_priority_class(ticket.priority) }}">
@@ -172,13 +170,11 @@
                                         <span class="text-muted">Unassigned</span>
                                     {% endif %}
                                 </td>
-                                <td>
-                                    <small>{{ ticket.created_at.strftime('%b %d, %Y') if ticket.created_at else 'N/A' }}</small>
-                                </td>
+                                <td><small>{{ ticket.created_at.strftime('%b %d, %Y') if ticket.created_at else 'N/A' }}</small></td>
                                 <td>
                                     <a href="{{ url_for('tickets.view_ticket', ticket_id=ticket.ticket_id) }}" 
-                                       class="btn btn-sm btn-primary" title="View Details">
-                                        <i class="fas fa-eye"></i>
+                                       class="btn btn-sm btn-primary">
+                                        <i class="fas fa-eye"></i> View
                                     </a>
                                 </td>
                             </tr>
@@ -193,7 +189,7 @@
                     <ul class="pagination justify-content-center">
                         <li class="page-item {% if page == 1 %}disabled{% endif %}">
                             <a class="page-link" href="{{ url_for('admin.tickets', page=page-1, **filters) }}">
-                                <i class="fas fa-chevron-left"></i> Previous
+                                Previous
                             </a>
                         </li>
                         
@@ -211,7 +207,7 @@
 
                         <li class="page-item {% if page == total_pages %}disabled{% endif %}">
                             <a class="page-link" href="{{ url_for('admin.tickets', page=page+1, **filters) }}">
-                                Next <i class="fas fa-chevron-right"></i>
+                                Next
                             </a>
                         </li>
                     </ul>
@@ -226,9 +222,9 @@
                 </div>
             {% else %}
                 <div class="text-center py-5">
-                    <i class="fas fa-inbox fa-5x text-muted mb-3"></i>
-                    <h4>No Tickets Found</h4>
-                    <p class="text-muted">No tickets match your current filters, or no tickets exist yet.</p>
+                    <i class="fas fa-inbox" style="font-size: 3rem; color: var(--text-light); opacity: 0.5;"></i>
+                    <h4 class="mt-3">No Tickets Found</h4>
+                    <p class="text-muted">No tickets match your filters or no tickets exist yet.</p>
                     <a href="{{ url_for('admin.tickets') }}" class="btn btn-primary">
                         <i class="fas fa-redo"></i> Clear Filters
                     </a>

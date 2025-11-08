@@ -18,17 +18,15 @@
     </div>
 
     <!-- Ticket Header -->
-    <div class="card shadow mb-4">
-        <div class="card-header bg-primary text-white">
+    <div class="card mb-4">
+        <div class="card-header">
             <div class="row align-items-center">
                 <div class="col-md-8">
-                    <h4 class="mb-0">
-                        <i class="fas fa-ticket-alt"></i> {{ ticket.subject }}
-                    </h4>
+                    <h4 class="mb-0">{{ ticket.subject }}</h4>
                     <small>Ticket #{{ ticket.ticket_number }}</small>
                 </div>
                 <div class="col-md-4 text-end">
-                    <span class="badge {{ get_priority_class(ticket.priority) }} fs-6">
+                    <span class="badge {{ get_priority_class(ticket.priority) }} fs-6 me-2">
                         {{ ticket.priority|upper }}
                     </span>
                     <span class="badge {{ get_status_class(ticket.status) }} fs-6">
@@ -40,17 +38,17 @@
         <div class="card-body">
             <div class="row mb-3">
                 <div class="col-md-6">
-                    <p class="mb-2"><strong><i class="fas fa-user"></i> Customer:</strong> {{ ticket.customer_name }}</p>
-                    <p class="mb-2"><strong><i class="fas fa-envelope"></i> Email:</strong> {{ ticket.customer_email }}</p>
-                    <p class="mb-2"><strong><i class="fas fa-tag"></i> Category:</strong> <span class="badge bg-info">{{ ticket.category_name }}</span></p>
+                    <p class="mb-2"><strong>Customer:</strong> {{ ticket.customer_name }}</p>
+                    <p class="mb-2"><strong>Email:</strong> {{ ticket.customer_email }}</p>
+                    <p class="mb-2"><strong>Category:</strong> <span class="badge bg-info">{{ ticket.category_name }}</span></p>
                 </div>
                 <div class="col-md-6">
-                    <p class="mb-2"><strong><i class="fas fa-clock"></i> Created:</strong> {{ ticket.created_at.strftime('%b %d, %Y %I:%M %p') if ticket.created_at else 'N/A' }}</p>
-                    <p class="mb-2"><strong><i class="fas fa-sync"></i> Last Updated:</strong> {{ ticket.updated_at.strftime('%b %d, %Y %I:%M %p') if ticket.updated_at else 'N/A' }}</p>
+                    <p class="mb-2"><strong>Created:</strong> {{ ticket.created_at.strftime('%b %d, %Y %I:%M %p') if ticket.created_at else 'N/A' }}</p>
+                    <p class="mb-2"><strong>Last Updated:</strong> {{ ticket.updated_at.strftime('%b %d, %Y %I:%M %p') if ticket.updated_at else 'N/A' }}</p>
                     {% if ticket.assigned_agent_name %}
-                    <p class="mb-2"><strong><i class="fas fa-user-tie"></i> Assigned To:</strong> {{ ticket.assigned_agent_name }}</p>
+                    <p class="mb-2"><strong>Assigned To:</strong> {{ ticket.assigned_agent_name }}</p>
                     {% else %}
-                    <p class="mb-2"><strong><i class="fas fa-user-tie"></i> Assigned To:</strong> <span class="text-muted">Not assigned</span></p>
+                    <p class="mb-2"><strong>Assigned To:</strong> <span class="text-muted">Not assigned</span></p>
                     {% endif %}
                 </div>
             </div>
@@ -58,17 +56,17 @@
             <hr>
             
             <div class="mb-3">
-                <h5><i class="fas fa-align-left"></i> Description</h5>
+                <h5>Description</h5>
                 <p class="text-muted">{{ ticket.description }}</p>
             </div>
         </div>
     </div>
 
-    <!-- Admin Actions (Only for Agents/Admins) -->
+    <!-- Admin Actions -->
     {% if current_user.is_agent() %}
-    <div class="card shadow mb-4">
-        <div class="card-header bg-warning">
-            <h5 class="mb-0"><i class="fas fa-tools"></i> Admin Actions</h5>
+    <div class="card mb-4">
+        <div class="card-header" style="background-color: var(--warning);">
+            <h5 class="mb-0" style="color: #333;">Admin Actions</h5>
         </div>
         <div class="card-body">
             <div class="row">
@@ -83,7 +81,7 @@
                             <option value="closed" {% if ticket.status == 'closed' %}selected{% endif %}>Closed</option>
                         </select>
                         <button type="submit" class="btn btn-primary btn-sm w-100">
-                            <i class="fas fa-save"></i> Update Status
+                            Update Status
                         </button>
                     </form>
                 </div>
@@ -99,7 +97,7 @@
                             <option value="urgent" {% if ticket.priority == 'urgent' %}selected{% endif %}>Urgent</option>
                         </select>
                         <button type="submit" class="btn btn-warning btn-sm w-100">
-                            <i class="fas fa-exclamation-triangle"></i> Update Priority
+                            Update Priority
                         </button>
                     </form>
                 </div>
@@ -110,11 +108,10 @@
                         <label class="form-label"><strong>Assign To:</strong></label>
                         <select name="agent_id" class="form-select mb-2">
                             <option value="">Select Agent...</option>
-                            <!-- You'd populate this from agents list -->
                             <option value="{{ current_user.user_id }}">Myself</option>
                         </select>
                         <button type="submit" class="btn btn-info btn-sm w-100">
-                            <i class="fas fa-user-check"></i> Assign Ticket
+                            Assign Ticket
                         </button>
                     </form>
                 </div>
@@ -124,9 +121,9 @@
     {% endif %}
 
     <!-- Responses/Timeline -->
-    <div class="card shadow mb-4">
-        <div class="card-header bg-primary text-white">
-            <h5 class="mb-0"><i class="fas fa-comments"></i> Responses</h5>
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Responses</h5>
         </div>
         <div class="card-body">
             {% if responses %}
@@ -163,9 +160,9 @@
     </div>
 
     <!-- Add Response Form -->
-    <div class="card shadow">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0"><i class="fas fa-reply"></i> Add Response</h5>
+    <div class="card mb-4">
+        <div class="card-header" style="background-color: var(--success);">
+            <h5 class="mb-0" style="color: white;">Add Response</h5>
         </div>
         <div class="card-body">
             <form method="POST" action="{{ url_for('tickets.add_reply', ticket_id=ticket.ticket_id) }}">
@@ -173,10 +170,10 @@
                     <label for="response_text" class="form-label">Your Response</label>
                     <textarea class="form-control" id="response_text" name="response_text" rows="4" 
                               placeholder="Type your response here..." required minlength="10"></textarea>
-                    <div class="form-text">Minimum 10 characters</div>
+                    <small class="text-muted">Minimum 10 characters</small>
                 </div>
                 <button type="submit" class="btn btn-success">
-                    <i class="fas fa-paper-plane"></i> Send Response
+                    Send Response
                 </button>
             </form>
         </div>
@@ -184,18 +181,19 @@
 
     <!-- Internal Note Form (Admin Only) -->
     {% if current_user.is_agent() %}
-    <div class="card shadow mt-3">
-        <div class="card-header bg-warning">
-            <h5 class="mb-0"><i class="fas fa-sticky-note"></i> Add Internal Note (Not visible to customer)</h5>
+    <div class="card">
+        <div class="card-header" style="background-color: var(--warning);">
+            <h5 class="mb-0" style="color: #333;">Add Internal Note</h5>
         </div>
         <div class="card-body">
+            <p class="text-muted small mb-3">Internal notes are not visible to the customer</p>
             <form method="POST" action="{{ url_for('admin.add_internal_note', ticket_id=ticket.ticket_id) }}">
                 <div class="mb-3">
                     <textarea class="form-control" name="note_text" rows="3" 
                               placeholder="Add internal notes for team members..." required minlength="5"></textarea>
                 </div>
                 <button type="submit" class="btn btn-warning">
-                    <i class="fas fa-save"></i> Save Internal Note
+                    Save Internal Note
                 </button>
             </form>
         </div>

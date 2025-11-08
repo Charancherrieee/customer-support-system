@@ -6,7 +6,7 @@
 <div class="container-fluid">
     <div class="row mb-4">
         <div class="col-md-8">
-            <h2><i class="fas fa-chart-bar"></i> Analytics & Reports</h2>
+            <h2>Analytics & Reports</h2>
             <p class="text-muted">Performance metrics and insights</p>
         </div>
         <div class="col-md-4 text-end">
@@ -25,7 +25,7 @@
                 <i class="fas fa-ticket-alt"></i>
                 <h3>{% if status_distribution %}{{ status_distribution|sum(attribute='count') }}{% else %}0{% endif %}</h3>
                 <p>Total Tickets</p>
-                <small>In the last {{ days }} days</small>
+                <small style="opacity: 0.9;">Last {{ days }} days</small>
             </div>
         </div>
         <div class="col-md-4">
@@ -70,13 +70,13 @@
     <!-- Charts Row -->
     <div class="row mb-4">
         <div class="col-md-6">
-            <div class="card shadow">
+            <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-chart-pie"></i> Ticket Status Distribution</h5>
+                    <h5 class="mb-0">Ticket Status Distribution</h5>
                 </div>
                 <div class="card-body">
                     {% if status_distribution %}
-                    <div class="chart-container">
+                    <div class="chart-container" style="height: 250px;">
                         <canvas id="statusChart"></canvas>
                     </div>
                     <div class="mt-3">
@@ -95,13 +95,13 @@
         </div>
 
         <div class="col-md-6">
-            <div class="card shadow">
+            <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-chart-pie"></i> Category Distribution</h5>
+                    <h5 class="mb-0">Category Distribution</h5>
                 </div>
                 <div class="card-body">
                     {% if category_stats %}
-                    <div class="chart-container">
+                    <div class="chart-container" style="height: 250px;">
                         <canvas id="categoryChart"></canvas>
                     </div>
                     <div class="mt-3">
@@ -123,9 +123,9 @@
     <!-- Volume Trend -->
     <div class="row mb-4">
         <div class="col-md-12">
-            <div class="card shadow">
+            <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-chart-line"></i> Ticket Volume Trend (Last {{ days }} Days)</h5>
+                    <h5 class="mb-0">Ticket Volume Trend (Last {{ days }} Days)</h5>
                 </div>
                 <div class="card-body">
                     {% if volume_trend %}
@@ -143,9 +143,9 @@
     <!-- Resolution Time -->
     <div class="row mb-4">
         <div class="col-md-12">
-            <div class="card shadow">
+            <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-clock"></i> Average Resolution Time by Priority</h5>
+                    <h5 class="mb-0">Average Resolution Time by Priority</h5>
                 </div>
                 <div class="card-body">
                     {% if resolution_times %}
@@ -181,17 +181,17 @@
     </div>
 
     <!-- Agent Performance -->
-    <div class="row mb-4">
+    <div class="row">
         <div class="col-md-12">
-            <div class="card shadow">
+            <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-users"></i> Agent Performance</h5>
+                    <h5 class="mb-0">Agent Performance</h5>
                 </div>
                 <div class="card-body">
                     {% if agent_performance %}
                     <div class="table-responsive">
                         <table class="table table-hover">
-                            <thead class="table-light">
+                            <thead>
                                 <tr>
                                     <th>Agent Name</th>
                                     <th>Total Assigned</th>
@@ -218,7 +218,7 @@
                                     <td>
                                         {% if agent.total_assigned and agent.total_assigned > 0 %}
                                             {% set rate = ((agent.resolved or 0) / agent.total_assigned * 100) %}
-                                            <div class="progress">
+                                            <div class="progress" style="height: 20px;">
                                                 <div class="progress-bar bg-success" style="width: {{ rate }}%">
                                                     {{ "%.0f"|format(rate) }}%
                                                 </div>
@@ -255,7 +255,7 @@ if (statusCtx) {
             labels: statusLabels,
             datasets: [{
                 data: statusData,
-                backgroundColor: ['#6B46C1', '#B794F4', '#48BB78', '#718096']
+                backgroundColor: ['#FF69B4', '#B794F4', '#28A745', '#6C757D']
             }]
         },
         options: {
@@ -282,7 +282,7 @@ if (categoryCtx) {
             labels: categoryLabels,
             datasets: [{
                 data: categoryData,
-                backgroundColor: ['#6B46C1', '#48BB78', '#ED8936', '#F56565', '#4299E1']
+                backgroundColor: ['#FF69B4', '#28A745', '#FFC107', '#DC3545', '#17A2B8']
             }]
         },
         options: {
@@ -310,8 +310,8 @@ if (volumeCtx) {
             datasets: [{
                 label: 'Tickets Created',
                 data: volumeData,
-                borderColor: '#6B46C1',
-                backgroundColor: 'rgba(107, 70, 193, 0.1)',
+                borderColor: '#FF69B4',
+                backgroundColor: 'rgba(255, 105, 180, 0.1)',
                 tension: 0.4,
                 fill: true
             }]
@@ -341,7 +341,7 @@ if (resolutionCtx) {
             datasets: [{
                 label: 'Avg. Hours to Resolve',
                 data: resolutionData,
-                backgroundColor: ['#48BB78', '#4299E1', '#ED8936', '#F56565']
+                backgroundColor: ['#28A745', '#17A2B8', '#FFC107', '#DC3545']
             }]
         },
         options: {

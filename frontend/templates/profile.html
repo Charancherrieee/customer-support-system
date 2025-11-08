@@ -6,14 +6,14 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card shadow-lg">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0"><i class="fas fa-user-circle"></i> My Profile</h4>
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="mb-0">My Profile</h3>
                 </div>
-                <div class="card-body p-4">
+                <div class="card-body">
                     <!-- Current Info Display -->
                     <div class="alert alert-info">
-                        <h5><i class="fas fa-info-circle"></i> Current Information</h5>
+                        <h5>Current Information</h5>
                         <p class="mb-1"><strong>Name:</strong> {{ user.full_name }}</p>
                         <p class="mb-1"><strong>Email:</strong> {{ user.email }}</p>
                         <p class="mb-1"><strong>Phone:</strong> {{ user.phone if user.phone else 'Not provided' }}</p>
@@ -21,11 +21,11 @@
                     </div>
 
                     <!-- Update Profile Form -->
+                    <h5 class="mt-4 mb-3">Update Profile</h5>
+                    
                     <form method="POST" action="{{ url_for('auth.profile') }}">
-                        <h5 class="mb-3"><i class="fas fa-edit"></i> Update Profile</h5>
-                        
                         <div class="mb-3">
-                            <label for="full_name" class="form-label">Full Name *</label>
+                            <label for="full_name" class="form-label">Full Name</label>
                             <input type="text" class="form-control" id="full_name" name="full_name" 
                                    value="{{ user.full_name }}" required minlength="3">
                         </div>
@@ -37,10 +37,10 @@
                                    placeholder="+91 1234567890">
                         </div>
 
-                        <hr class="my-4">
+                        <hr>
 
-                        <h5 class="mb-3"><i class="fas fa-key"></i> Change Password (Optional)</h5>
-                        <p class="text-muted small">Leave blank if you don't want to change your password</p>
+                        <h5 class="mb-3">Change Password (Optional)</h5>
+                        <p class="text-muted">Leave blank if you don't want to change your password</p>
 
                         <div class="mb-3">
                             <label for="current_password" class="form-label">Current Password</label>
@@ -52,7 +52,7 @@
                             <label for="new_password" class="form-label">New Password</label>
                             <input type="password" class="form-control" id="new_password" name="new_password" 
                                    placeholder="Enter new password" minlength="6">
-                            <div class="form-text">Minimum 6 characters</div>
+                            <small class="text-muted">Minimum 6 characters</small>
                         </div>
 
                         <div class="mb-4">
@@ -61,17 +61,17 @@
                                    placeholder="Confirm new password">
                         </div>
 
-                        <div class="d-grid gap-2">
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                             <button type="submit" class="btn btn-primary btn-lg">
-                                <i class="fas fa-save"></i> Update Profile
+                                Save Changes
                             </button>
                             {% if current_user.is_agent() %}
                                 <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-secondary">
-                                    <i class="fas fa-times"></i> Cancel
+                                    Cancel
                                 </a>
                             {% else %}
                                 <a href="{{ url_for('tickets.user_dashboard') }}" class="btn btn-outline-secondary">
-                                    <i class="fas fa-times"></i> Cancel
+                                    Cancel
                                 </a>
                             {% endif %}
                         </div>
@@ -79,11 +79,11 @@
                 </div>
             </div>
 
-            <!-- Account Info Card -->
-            <div class="card mt-4">
+            <!-- Account Security Card -->
+            <div class="card">
                 <div class="card-body">
-                    <h5><i class="fas fa-shield-alt"></i> Account Security</h5>
-                    <ul class="list-unstyled mb-0">
+                    <h5>Account Security</h5>
+                    <ul class="list-unstyled">
                         <li><i class="fas fa-check-circle text-success"></i> Your password is encrypted</li>
                         <li><i class="fas fa-check-circle text-success"></i> Session timeout: 24 hours</li>
                         <li><i class="fas fa-check-circle text-success"></i> Account created: {{ user.created_at.strftime('%b %d, %Y') if user.created_at else 'N/A' }}</li>

@@ -6,7 +6,7 @@
 <div class="container">
     <div class="row mb-4">
         <div class="col-md-8">
-            <h2><i class="fas fa-history"></i> My Tickets</h2>
+            <h2>My Tickets</h2>
             <p class="text-muted">View and manage all your support tickets</p>
         </div>
         <div class="col-md-4 text-end">
@@ -17,7 +17,7 @@
     </div>
 
     <!-- Filter Section -->
-    <div class="card mb-4 shadow-sm">
+    <div class="card mb-4">
         <div class="card-body">
             <form method="GET" action="{{ url_for('tickets.ticket_history') }}" class="row g-3">
                 <div class="col-md-4">
@@ -55,46 +55,44 @@
         <div class="col-md-12">
             {% if tickets %}
                 {% for ticket in tickets %}
-                <div class="card ticket-card priority-{{ ticket.priority }} mb-3 shadow-sm">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-8">
-                                <h5 class="card-title">
-                                    <a href="{{ url_for('tickets.view_ticket', ticket_id=ticket.ticket_id) }}" class="text-decoration-none">
-                                        {{ ticket.subject }}
-                                    </a>
-                                </h5>
-                                <p class="card-text text-muted">
-                                    {{ ticket.description[:150] }}{% if ticket.description|length > 150 %}...{% endif %}
-                                </p>
-                                <div class="d-flex gap-2 flex-wrap">
-                                    <span class="badge bg-secondary">
-                                        <i class="fas fa-hashtag"></i> {{ ticket.ticket_number }}
-                                    </span>
-                                    <span class="badge bg-info">
-                                        <i class="fas fa-tag"></i> {{ ticket.category_name }}
-                                    </span>
-                                    <span class="badge {{ get_priority_class(ticket.priority) }}">
-                                        <i class="fas fa-exclamation-circle"></i> {{ ticket.priority|upper }}
-                                    </span>
-                                    <span class="badge {{ get_status_class(ticket.status) }}">
-                                        <i class="fas fa-info-circle"></i> {{ ticket.status.replace('_', ' ')|title }}
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="col-md-4 text-end">
-                                <p class="text-muted mb-2">
-                                    <small><i class="fas fa-clock"></i> Created: {{ ticket.created_at.strftime('%b %d, %Y %I:%M %p') if ticket.created_at else 'N/A' }}</small>
-                                </p>
-                                {% if ticket.updated_at and ticket.updated_at != ticket.created_at %}
-                                <p class="text-muted mb-3">
-                                    <small><i class="fas fa-sync"></i> Updated: {{ ticket.updated_at.strftime('%b %d, %Y %I:%M %p') }}</small>
-                                </p>
-                                {% endif %}
-                                <a href="{{ url_for('tickets.view_ticket', ticket_id=ticket.ticket_id) }}" class="btn btn-primary btn-sm">
-                                    <i class="fas fa-eye"></i> View Details
+                <div class="ticket-card priority-{{ ticket.priority }}">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h5 class="card-title mb-2">
+                                <a href="{{ url_for('tickets.view_ticket', ticket_id=ticket.ticket_id) }}" class="text-decoration-none">
+                                    {{ ticket.subject }}
                                 </a>
+                            </h5>
+                            <p class="card-text text-muted mb-2">
+                                {{ ticket.description[:150] }}{% if ticket.description|length > 150 %}...{% endif %}
+                            </p>
+                            <div class="d-flex gap-2 flex-wrap">
+                                <span class="badge bg-secondary">
+                                    {{ ticket.ticket_number }}
+                                </span>
+                                <span class="badge bg-info">
+                                    {{ ticket.category_name }}
+                                </span>
+                                <span class="badge {{ get_priority_class(ticket.priority) }}">
+                                    {{ ticket.priority|upper }}
+                                </span>
+                                <span class="badge {{ get_status_class(ticket.status) }}">
+                                    {{ ticket.status.replace('_', ' ')|title }}
+                                </span>
                             </div>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <p class="text-muted mb-2">
+                                <small>Created: {{ ticket.created_at.strftime('%b %d, %Y %I:%M %p') if ticket.created_at else 'N/A' }}</small>
+                            </p>
+                            {% if ticket.updated_at and ticket.updated_at != ticket.created_at %}
+                            <p class="text-muted mb-3">
+                                <small>Updated: {{ ticket.updated_at.strftime('%b %d, %Y %I:%M %p') }}</small>
+                            </p>
+                            {% endif %}
+                            <a href="{{ url_for('tickets.view_ticket', ticket_id=ticket.ticket_id) }}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-eye"></i> View Details
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -102,14 +100,13 @@
 
                 <!-- Summary -->
                 <div class="alert alert-info">
-                    <i class="fas fa-info-circle"></i> 
                     Showing <strong>{{ tickets|length }}</strong> ticket(s)
                 </div>
             {% else %}
-                <div class="card shadow">
+                <div class="card">
                     <div class="card-body text-center py-5">
-                        <i class="fas fa-inbox fa-5x text-muted mb-4"></i>
-                        <h3>No Tickets Found</h3>
+                        <i class="fas fa-inbox" style="font-size: 3rem; color: var(--text-light); opacity: 0.5;"></i>
+                        <h4 class="mt-3">No Tickets Found</h4>
                         <p class="text-muted mb-4">You haven't created any support tickets yet, or no tickets match your filters.</p>
                         <a href="{{ url_for('tickets.create_ticket') }}" class="btn btn-primary btn-lg">
                             <i class="fas fa-plus-circle"></i> Create Your First Ticket

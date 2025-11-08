@@ -3,696 +3,146 @@
 {% block title %}Home - Customer Support{% endblock %}
 
 {% block content %}
-<!-- Hero Section with Animation -->
-<div class="hero-section">
-    <div class="container">
-        <div class="row align-items-center min-vh-80">
-            <div class="col-lg-6 fade-in-left">
-                <div class="hero-badge mb-3">
-                    <i class="fas fa-star"></i> #1 Support System
-                </div>
-                <h1 class="hero-title">
-                    Your Problems, <span class="text-gradient">Our Priority</span>
-                </h1>
-                <p class="hero-subtitle">
-                    Experience lightning-fast support with our advanced ticketing system. 
-                    Track, manage, and resolve issues in real-time with our dedicated team.
-                </p>
-                <div class="hero-buttons mt-4">
-                    <a href="{{ url_for('auth.signup') }}" class="btn btn-primary btn-lg pulse-button me-3">
-                        <i class="fas fa-rocket"></i> Get Started Free
-                    </a>
-                    <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary btn-lg">
-                        <i class="fas fa-sign-in-alt"></i> Sign In
-                    </a>
-                </div>
-                <div class="hero-stats mt-5">
-                    <div class="row text-center">
-                        <div class="col-4">
-                            <div class="stat-number" data-target="5000">0</div>
-                            <div class="stat-label">Happy Users</div>
-                        </div>
-                        <div class="col-4">
-                            <div class="stat-number" data-target="98">0</div>
-                            <div class="stat-label">% Satisfaction</div>
-                        </div>
-                        <div class="col-4">
-                            <div class="stat-number" data-target="24">0</div>
-                            <div class="stat-label">Hour Support</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6 fade-in-right">
-                <div class="hero-image-container">
-                    <div class="floating-card card-1">
-                        <i class="fas fa-ticket-alt"></i>
-                        <span>New Ticket</span>
-                    </div>
-                    <div class="floating-card card-2">
-                        <i class="fas fa-check-circle"></i>
-                        <span>Resolved</span>
-                    </div>
-                    <div class="floating-card card-3">
-                        <i class="fas fa-clock"></i>
-                        <span>24/7 Support</span>
-                    </div>
-                    <div class="hero-illustration">
-                        <i class="fas fa-headset fa-10x text-purple-gradient"></i>
-                    </div>
-                </div>
-            </div>
+<!-- Hero Section -->
+<div class="row align-items-center py-5">
+    <div class="col-lg-6">
+        <h1 class="display-4 mb-4">Customer Support System</h1>
+        <p class="lead mb-4">Track, manage, and resolve customer support tickets efficiently with our simple and powerful system.</p>
+        <div class="d-grid gap-2 d-md-flex mb-4">
+            <a href="{{ url_for('auth.signup') }}" class="btn btn-primary btn-lg">Get Started</a>
+            <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary btn-lg">Sign In</a>
         </div>
+    </div>
+    <div class="col-lg-6 text-center">
+        <i class="fas fa-headset" style="font-size: 8rem; color: var(--primary-light); opacity: 0.5;"></i>
     </div>
 </div>
 
+<hr class="my-5">
+
 <!-- Features Section -->
-<section class="features-section py-5">
-    <div class="container">
-        <div class="text-center mb-5 fade-in-up">
-            <h2 class="section-title">Why Choose Our Support System?</h2>
-            <p class="section-subtitle">Everything you need to manage customer support efficiently</p>
+<section class="py-5">
+    <h2 class="text-center mb-5">Why Choose Us?</h2>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-bolt text-primary" style="font-size: 2.5rem; margin-bottom: 1rem;"></i>
+                    <h5 class="card-title">Fast & Efficient</h5>
+                    <p class="card-text">Create and track tickets in seconds. Get quick responses to your issues.</p>
+                </div>
+            </div>
         </div>
-
-        <div class="row g-4">
-            <div class="col-md-4 fade-in-up" style="animation-delay: 0.1s;">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-bolt"></i>
-                    </div>
-                    <h4>Lightning Fast</h4>
-                    <p>Submit and track tickets in seconds. Our system is optimized for speed and efficiency.</p>
-                    <div class="feature-arrow">
-                        <i class="fas fa-arrow-right"></i>
-                    </div>
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-lock text-primary" style="font-size: 2.5rem; margin-bottom: 1rem;"></i>
+                    <h5 class="card-title">Secure & Private</h5>
+                    <p class="card-text">Your data is encrypted and protected. We prioritize your security.</p>
                 </div>
             </div>
-
-            <div class="col-md-4 fade-in-up" style="animation-delay: 0.2s;">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h4>Secure & Private</h4>
-                    <p>Your data is encrypted and protected. We prioritize your security above everything.</p>
-                    <div class="feature-arrow">
-                        <i class="fas fa-arrow-right"></i>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 fade-in-up" style="animation-delay: 0.3s;">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h4>Real-time Analytics</h4>
-                    <p>Track performance metrics and resolution times with our comprehensive analytics dashboard.</p>
-                    <div class="feature-arrow">
-                        <i class="fas fa-arrow-right"></i>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 fade-in-up" style="animation-delay: 0.4s;">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <h4>Team Collaboration</h4>
-                    <p>Assign tickets to team members and collaborate seamlessly on complex issues.</p>
-                    <div class="feature-arrow">
-                        <i class="fas fa-arrow-right"></i>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 fade-in-up" style="animation-delay: 0.5s;">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <h4>Mobile Responsive</h4>
-                    <p>Access your tickets from anywhere. Fully optimized for all devices and screen sizes.</p>
-                    <div class="feature-arrow">
-                        <i class="fas fa-arrow-right"></i>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 fade-in-up" style="animation-delay: 0.6s;">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-bell"></i>
-                    </div>
-                    <h4>Smart Notifications</h4>
-                    <p>Get instant updates on ticket status changes and responses via email notifications.</p>
-                    <div class="feature-arrow">
-                        <i class="fas fa-arrow-right"></i>
-                    </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-chart-bar text-primary" style="font-size: 2.5rem; margin-bottom: 1rem;"></i>
+                    <h5 class="card-title">Real-time Analytics</h5>
+                    <p class="card-text">Track performance metrics and get insights into your support system.</p>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Categories Section -->
-<section class="categories-section py-5 bg-light-purple">
-    <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="section-title">Support Categories</h2>
-            <p class="section-subtitle">We're here to help with all your needs</p>
+<hr class="my-5">
+
+<!-- Support Categories -->
+<section class="py-5">
+    <h2 class="text-center mb-5">Support Categories</h2>
+    <div class="row g-3">
+        <div class="col-md-3 col-sm-6">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-cog text-primary" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                    <h6 class="card-title">Technical Issues</h6>
+                    <p class="card-text small">Bug fixes and troubleshooting</p>
+                </div>
+            </div>
         </div>
-
-        <div class="row g-4">
-            <div class="col-md-3 col-sm-6">
-                <div class="category-card">
-                    <div class="category-icon bg-purple">
-                        <i class="fas fa-cog"></i>
-                    </div>
-                    <h5>Technical Issues</h5>
-                    <p>Bug fixes and troubleshooting</p>
+        <div class="col-md-3 col-sm-6">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-credit-card text-primary" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                    <h6 class="card-title">Billing & Payments</h6>
+                    <p class="card-text small">Invoice and payment queries</p>
                 </div>
             </div>
-
-            <div class="col-md-3 col-sm-6">
-                <div class="category-card">
-                    <div class="category-icon bg-success">
-                        <i class="fas fa-credit-card"></i>
-                    </div>
-                    <h5>Billing & Payments</h5>
-                    <p>Invoice and payment queries</p>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-truck text-primary" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                    <h6 class="card-title">Delivery</h6>
+                    <p class="card-text small">Shipping and tracking support</p>
                 </div>
             </div>
-
-            <div class="col-md-3 col-sm-6">
-                <div class="category-card">
-                    <div class="category-icon bg-info">
-                        <i class="fas fa-truck"></i>
-                    </div>
-                    <h5>Delivery</h5>
-                    <p>Shipping and tracking support</p>
-                </div>
-            </div>
-
-            <div class="col-md-3 col-sm-6">
-                <div class="category-card">
-                    <div class="category-icon bg-warning">
-                        <i class="fas fa-undo"></i>
-                    </div>
-                    <h5>Returns & Refunds</h5>
-                    <p>Easy return process</p>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-undo text-primary" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                    <h6 class="card-title">Returns & Refunds</h6>
+                    <p class="card-text small">Easy return process</p>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Process Section -->
-<section class="process-section py-5">
-    <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="section-title">How It Works</h2>
-            <p class="section-subtitle">Get support in 3 simple steps</p>
+<hr class="my-5">
+
+<!-- How It Works -->
+<section class="py-5">
+    <h2 class="text-center mb-5">How It Works</h2>
+    <div class="row g-4">
+        <div class="col-md-4 text-center">
+            <div class="mb-3">
+                <div style="width: 80px; height: 80px; background-color: var(--primary-color); border-radius: 50%; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+                    <span style="font-size: 2rem; color: white; font-weight: bold;">1</span>
+                </div>
+            </div>
+            <h5>Create Account</h5>
+            <p class="text-muted">Sign up with your email address and create an account in seconds.</p>
         </div>
-
-        <div class="row align-items-center">
-            <div class="col-md-4 text-center mb-4">
-                <div class="process-step">
-                    <div class="process-number">1</div>
-                    <div class="process-icon">
-                        <i class="fas fa-user-plus"></i>
-                    </div>
-                    <h4>Create Account</h4>
-                    <p>Sign up in seconds with your email</p>
+        <div class="col-md-4 text-center">
+            <div class="mb-3">
+                <div style="width: 80px; height: 80px; background-color: var(--primary-color); border-radius: 50%; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+                    <span style="font-size: 2rem; color: white; font-weight: bold;">2</span>
                 </div>
             </div>
-
-            <div class="col-md-4 text-center mb-4">
-                <div class="process-step">
-                    <div class="process-number">2</div>
-                    <div class="process-icon">
-                        <i class="fas fa-edit"></i>
-                    </div>
-                    <h4>Submit Ticket</h4>
-                    <p>Describe your issue with details</p>
+            <h5>Submit Ticket</h5>
+            <p class="text-muted">Describe your issue with details and select the appropriate category.</p>
+        </div>
+        <div class="col-md-4 text-center">
+            <div class="mb-3">
+                <div style="width: 80px; height: 80px; background-color: var(--primary-color); border-radius: 50%; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+                    <span style="font-size: 2rem; color: white; font-weight: bold;">3</span>
                 </div>
             </div>
-
-            <div class="col-md-4 text-center mb-4">
-                <div class="process-step">
-                    <div class="process-number">3</div>
-                    <div class="process-icon">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    <h4>Get Resolution</h4>
-                    <p>Our team resolves your issue quickly</p>
-                </div>
-            </div>
+            <h5>Get Resolution</h5>
+            <p class="text-muted">Our team will work on your issue and get back to you with solutions.</p>
         </div>
     </div>
 </section>
+
+<hr class="my-5">
 
 <!-- CTA Section -->
-<section class="cta-section py-5">
-    <div class="container">
-        <div class="cta-card text-center">
-            <h2 class="text-white mb-4">Ready to Get Started?</h2>
-            <p class="text-white mb-4 opacity-90">Join thousands of satisfied customers using our support system</p>
-            <a href="{{ url_for('auth.signup') }}" class="btn btn-light btn-lg pulse-button">
-                <i class="fas fa-rocket"></i> Create Free Account
-            </a>
-        </div>
+<section class="py-5" style="background-color: var(--light-bg); border-radius: 10px;">
+    <div class="text-center">
+        <h2 class="mb-4">Ready to Get Started?</h2>
+        <p class="lead mb-4">Join thousands of satisfied customers using our support system</p>
+        <a href="{{ url_for('auth.signup') }}" class="btn btn-primary btn-lg">Create Free Account</a>
     </div>
 </section>
-
-<script>
-// Counter Animation
-function animateCounter(element) {
-    const target = parseInt(element.getAttribute('data-target'));
-    const duration = 2000;
-    const step = target / (duration / 16);
-    let current = 0;
-    
-    const timer = setInterval(() => {
-        current += step;
-        if (current >= target) {
-            element.textContent = target + (element.parentElement.querySelector('.stat-label').textContent.includes('%') ? '%' : '+');
-            clearInterval(timer);
-        } else {
-            element.textContent = Math.floor(current) + (element.parentElement.querySelector('.stat-label').textContent.includes('%') ? '%' : '+');
-        }
-    }, 16);
-}
-
-// Trigger counter animation when visible
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            const counters = entry.target.querySelectorAll('.stat-number');
-            counters.forEach(counter => animateCounter(counter));
-            observer.unobserve(entry.target);
-        }
-    });
-});
-
-const heroStats = document.querySelector('.hero-stats');
-if (heroStats) {
-    observer.observe(heroStats);
-}
-
-// Fade in animations
-const fadeElements = document.querySelectorAll('.fade-in-up, .fade-in-left, .fade-in-right');
-const fadeObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-        }
-    });
-}, { threshold: 0.1 });
-
-fadeElements.forEach(el => fadeObserver.observe(el));
-</script>
-
-<style>
-.hero-section {
-    padding: 4rem 0;
-    overflow: hidden;
-}
-
-.min-vh-80 {
-    min-height: 80vh;
-}
-
-.hero-badge {
-    display: inline-block;
-    background: linear-gradient(135deg, var(--accent-purple) 0%, var(--secondary-purple) 100%);
-    color: var(--primary-purple-dark);
-    padding: 0.5rem 1.5rem;
-    border-radius: 50px;
-    font-weight: 700;
-    font-size: 0.9rem;
-    animation: bounce 2s infinite;
-}
-
-.hero-title {
-    font-size: 3.5rem;
-    font-weight: 900;
-    line-height: 1.2;
-    margin-bottom: 1.5rem;
-    color: var(--primary-purple-dark);
-}
-
-.text-gradient {
-    background: linear-gradient(135deg, var(--primary-purple) 0%, var(--secondary-purple) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.hero-subtitle {
-    font-size: 1.2rem;
-    color: var(--text-light);
-    line-height: 1.8;
-    max-width: 500px;
-}
-
-.pulse-button {
-    animation: pulse-shadow 2s infinite;
-}
-
-@keyframes pulse-shadow {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(107, 70, 193, 0.7); }
-    50% { box-shadow: 0 0 0 15px rgba(107, 70, 193, 0); }
-}
-
-.hero-stats {
-    padding-top: 2rem;
-    border-top: 2px solid var(--border-color);
-}
-
-.stat-number {
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: var(--primary-purple);
-}
-
-.stat-label {
-    font-size: 0.9rem;
-    color: var(--text-light);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.hero-image-container {
-    position: relative;
-    height: 500px;
-}
-
-.hero-illustration {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    animation: float 3s ease-in-out infinite;
-}
-
-@keyframes float {
-    0%, 100% { transform: translate(-50%, -50%) translateY(0); }
-    50% { transform: translate(-50%, -50%) translateY(-20px); }
-}
-
-.text-purple-gradient {
-    background: linear-gradient(135deg, var(--primary-purple) 0%, var(--secondary-purple) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.floating-card {
-    position: absolute;
-    background: white;
-    padding: 1rem 1.5rem;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(107, 70, 193, 0.2);
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    font-weight: 600;
-    animation: float-cards 3s ease-in-out infinite;
-}
-
-.floating-card i {
-    font-size: 1.5rem;
-    color: var(--primary-purple);
-}
-
-.card-1 {
-    top: 10%;
-    left: 10%;
-    animation-delay: 0s;
-}
-
-.card-2 {
-    top: 50%;
-    right: 10%;
-    animation-delay: 1s;
-}
-
-.card-3 {
-    bottom: 15%;
-    left: 15%;
-    animation-delay: 2s;
-}
-
-@keyframes float-cards {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-15px); }
-}
-
-.section-title {
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: var(--primary-purple-dark);
-    position: relative;
-    display: inline-block;
-}
-
-.section-subtitle {
-    font-size: 1.1rem;
-    color: var(--text-light);
-}
-
-.feature-card {
-    background: white;
-    padding: 2.5rem 2rem;
-    border-radius: 20px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-    transition: all 0.4s ease;
-    position: relative;
-    overflow: hidden;
-    height: 100%;
-}
-
-.feature-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 5px;
-    background: linear-gradient(90deg, var(--primary-purple) 0%, var(--secondary-purple) 100%);
-    transform: scaleX(0);
-    transition: transform 0.4s ease;
-}
-
-.feature-card:hover::before {
-    transform: scaleX(1);
-}
-
-.feature-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 40px rgba(107, 70, 193, 0.2);
-}
-
-.feature-icon {
-    width: 70px;
-    height: 70px;
-    background: linear-gradient(135deg, var(--primary-purple) 0%, var(--secondary-purple) 100%);
-    border-radius: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 1.5rem;
-    transition: all 0.4s ease;
-}
-
-.feature-card:hover .feature-icon {
-    transform: rotate(10deg) scale(1.1);
-}
-
-.feature-icon i {
-    font-size: 2rem;
-    color: white;
-}
-
-.feature-card h4 {
-    color: var(--primary-purple-dark);
-    font-weight: 700;
-    margin-bottom: 1rem;
-}
-
-.feature-card p {
-    color: var(--text-light);
-    line-height: 1.7;
-}
-
-.feature-arrow {
-    position: absolute;
-    bottom: 1.5rem;
-    right: 1.5rem;
-    width: 40px;
-    height: 40px;
-    background: var(--light-purple);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: all 0.3s ease;
-}
-
-.feature-card:hover .feature-arrow {
-    opacity: 1;
-    transform: translateX(5px);
-}
-
-.feature-arrow i {
-    color: var(--primary-purple);
-}
-
-.bg-light-purple {
-    background: linear-gradient(180deg, rgba(250, 245, 255, 0.3) 0%, rgba(255, 255, 255, 0) 100%);
-}
-
-.category-card {
-    background: white;
-    padding: 2rem;
-    border-radius: 16px;
-    text-align: center;
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-    height: 100%;
-}
-
-.category-card:hover {
-    border-color: var(--primary-purple);
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(107, 70, 193, 0.15);
-}
-
-.category-icon {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 1rem;
-    transition: all 0.3s ease;
-}
-
-.category-card:hover .category-icon {
-    transform: scale(1.15) rotate(5deg);
-}
-
-.category-icon i {
-    font-size: 1.8rem;
-    color: white;
-}
-
-.bg-purple {
-    background: linear-gradient(135deg, var(--primary-purple) 0%, var(--primary-purple-dark) 100%);
-}
-
-.process-step {
-    position: relative;
-    padding: 2rem;
-}
-
-.process-number {
-    position: absolute;
-    top: 0;
-    right: 50%;
-    transform: translateX(50%);
-    width: 50px;
-    height: 50px;
-    background: linear-gradient(135deg, var(--primary-purple) 0%, var(--secondary-purple) 100%);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 1.5rem;
-    font-weight: 800;
-    box-shadow: 0 5px 20px rgba(107, 70, 193, 0.3);
-}
-
-.process-icon {
-    width: 100px;
-    height: 100px;
-    background: var(--light-purple);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 3rem auto 1.5rem;
-    transition: all 0.3s ease;
-}
-
-.process-step:hover .process-icon {
-    background: linear-gradient(135deg, var(--primary-purple) 0%, var(--secondary-purple) 100%);
-    transform: scale(1.1) rotate(10deg);
-}
-
-.process-icon i {
-    font-size: 2.5rem;
-    color: var(--primary-purple);
-    transition: all 0.3s ease;
-}
-
-.process-step:hover .process-icon i {
-    color: white;
-}
-
-.cta-section {
-    background: linear-gradient(135deg, var(--primary-purple) 0%, var(--primary-purple-dark) 100%);
-}
-
-.cta-card {
-    padding: 4rem 2rem;
-}
-
-/* Animations */
-.fade-in-up, .fade-in-left, .fade-in-right {
-    opacity: 0;
-    transition: all 0.8s ease;
-}
-
-.fade-in-up {
-    transform: translateY(30px);
-}
-
-.fade-in-left {
-    transform: translateX(-30px);
-}
-
-.fade-in-right {
-    transform: translateX(30px);
-}
-
-.fade-in-up.visible, .fade-in-left.visible, .fade-in-right.visible {
-    opacity: 1;
-    transform: translate(0, 0);
-}
-
-@keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-5px); }
-}
-
-@media (max-width: 768px) {
-    .hero-title {
-        font-size: 2.5rem;
-    }
-    
-    .hero-image-container {
-        height: 300px;
-        margin-top: 3rem;
-    }
-    
-    .floating-card {
-        display: none;
-    }
-}
-</style>
 {% endblock %}

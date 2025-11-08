@@ -3,23 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Customer Support System{% endblock %} - Flipkart</title>
+    <title>{% block title %}Customer Support System{% endblock %}</title>
     
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     
     {% block extra_css %}{% endblock %}
 </head>
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg">
+    <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">
             <a class="navbar-brand" href="{{ url_for('index') }}">
-                Support Center
+                <i class="fas fa-headset"></i> Support Center
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -30,28 +27,28 @@
                         {% if current_user.is_agent() %}
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ url_for('admin.dashboard') }}">
-                                    Dashboard
+                                    <i class="fas fa-tachometer-alt"></i> Dashboard
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ url_for('admin.tickets') }}">
-                                    All Tickets
+                                    <i class="fas fa-list"></i> All Tickets
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ url_for('admin.analytics') }}">
-                                    Analytics
+                                    <i class="fas fa-chart-bar"></i> Analytics
                                 </a>
                             </li>
                         {% else %}
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ url_for('tickets.user_dashboard') }}">
-                                    Dashboard
+                                    <i class="fas fa-home"></i> Dashboard
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ url_for('tickets.create_ticket') }}">
-                                    <i class="fas fa-plus-circle"></i> New Ticket
+                                    <i class="fas fa-plus"></i> New Ticket
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -62,16 +59,12 @@
                         {% endif %}
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                                <i class="fas fa-user-circle"></i> {{ session.user_name }}
+                                <i class="fas fa-user"></i> {{ session.user_name }}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="{{ url_for('auth.profile') }}">
-                                    <i class="fas fa-user"></i> Profile
-                                </a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('auth.profile') }}">Profile</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">
-                                    <i class="fas fa-sign-out-alt"></i> Logout
-                                </a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">Logout</a></li>
                             </ul>
                         </li>
                     {% else %}
@@ -106,23 +99,20 @@
     {% endwith %}
 
     <!-- Main Content -->
-    <main class="py-4">
+    <main class="container py-4">
         {% block content %}{% endblock %}
     </main>
 
     <!-- Footer -->
-    <footer class="bg-dark text-white text-center py-4 mt-5">
+    <footer>
         <div class="container">
-            <p class="mb-0">&copy; 2024 Flipkart Pvt Ltd. Customer Support System</p>
-            <p class="mb-0"><small>Developed by Charan Penumarthi - Internship Project</small></p>
+            <p>&copy; 2024 Customer Support System. All rights reserved.</p>
+            <p><small>Flipkart Internship Project</small></p>
         </div>
     </footer>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Chart.js for analytics -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <!-- Custom JS -->
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     
     {% block extra_js %}{% endblock %}
