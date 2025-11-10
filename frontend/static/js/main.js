@@ -1,7 +1,7 @@
-// Simple JavaScript for Customer Support System
+
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Auto-hide alerts after 5 seconds
+  
     const alerts = document.querySelectorAll('.alert:not(.alert-permanent)');
     alerts.forEach(alert => {
         setTimeout(() => {
@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 5000);
     });
 
-    // Form validation
+   
     const forms = document.querySelectorAll('.needs-validation');
     forms.forEach(form => {
         form.addEventListener('submit', event => {
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Table row click navigation
+   
     const clickableRows = document.querySelectorAll('tr[data-href]');
     clickableRows.forEach(row => {
         row.style.cursor = 'pointer';
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Confirm dialogs
+    
     const confirmButtons = document.querySelectorAll('[data-confirm]');
     confirmButtons.forEach(button => {
         button.addEventListener('click', function(e) {
@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Character counter for textareas
+    
     const textareas = document.querySelectorAll('textarea[data-max-length]');
     textareas.forEach(textarea => {
         const maxLength = textarea.getAttribute('data-max-length');
